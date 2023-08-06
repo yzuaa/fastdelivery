@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table(name = "order")
@@ -24,7 +24,7 @@ public class Order implements Serializable {
     private User user;
 
     @JsonProperty("created_date")
-    private LocalDate createdDate;
+    private Date createdDate;
 
     private Double price;
 
@@ -34,7 +34,7 @@ public class Order implements Serializable {
     @JsonProperty("expected_delivery_time")
     private Double expectedDeliveryTime;
 
-    private Boolean status;
+    private String status;
 
     public Order() {}
 
@@ -56,7 +56,7 @@ public class Order implements Serializable {
         this.expectedDeliveryTime = expectedDeliveryTime;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -68,7 +68,7 @@ public class Order implements Serializable {
         return user;
     }
 
-    public LocalDate getCreatedDate() {
+    public Date getCreatedDate() {
         return createdDate;
     }
 
@@ -84,7 +84,7 @@ public class Order implements Serializable {
         return expectedDeliveryTime;
     }
 
-    public Boolean getStatus() {
+    public String getStatus() {
         return status;
     }
 
@@ -97,7 +97,7 @@ public class Order implements Serializable {
         private User user;
 
         @JsonProperty("created_date")
-        private LocalDate createdDate;
+        private Date createdDate;
 
         @JsonProperty("price")
         private Double price;
@@ -109,7 +109,7 @@ public class Order implements Serializable {
         private Double expectedDeliveryTime;
 
         @JsonProperty("status")
-        private Boolean status;
+        private String status;
 
         public Builder setId(Long id) {
             this.id = id;
@@ -121,7 +121,7 @@ public class Order implements Serializable {
             return this;
         }
 
-        public Builder setCreatedDate(LocalDate createdDate) {
+        public Builder setCreatedDate(Date createdDate) {
             this.createdDate = createdDate;
             return this;
         }
@@ -141,7 +141,7 @@ public class Order implements Serializable {
             return this;
         }
 
-        public Builder setStatus(Boolean status) {
+        public Builder setStatus(String status) {
             this.status = status;
             return this;
         }
