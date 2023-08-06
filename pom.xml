@@ -53,7 +53,14 @@
 			<artifactId>jjwt</artifactId>
 			<version>0.9.1</version>
 		</dependency>
-	</dependencies>
+
+        <!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-ses -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-ses</artifactId>
+            <version>1.11.232</version>
+        </dependency>
+    </dependencies>
     <build>
         <plugins>
             <plugin>
