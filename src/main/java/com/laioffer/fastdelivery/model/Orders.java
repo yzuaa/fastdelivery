@@ -24,7 +24,7 @@ public class Orders implements Serializable {
 
     @JsonProperty("created_date")
     private Date createdDate;
-
+    @JsonProperty
     private Double price;
 
     @JsonProperty("delivery_method")
@@ -32,7 +32,7 @@ public class Orders implements Serializable {
 
     @JsonProperty("expected_delivery_time")
     private Double expectedDeliveryTime;
-
+    @JsonProperty
     private String status;
 
     public Orders() {}
@@ -48,6 +48,7 @@ public class Orders implements Serializable {
     }
 
     public void setDeliveryMethod(String deliveryMethod) {
+
         this.deliveryMethod = deliveryMethod;
     }
 

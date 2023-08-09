@@ -20,7 +20,7 @@ public class OrderItem implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "order_id")
-    private Order order;
+    private Orders orders;
 
     private Double weight;
 
@@ -36,7 +36,7 @@ public class OrderItem implements Serializable {
 
     private OrderItem(Builder builder) {
         this.id = builder.id;
-        this.order = builder.order;
+        this.orders = builder.orders;
         this.weight = builder.weight;
         this.description = builder.description;
         this.pickupAddress = builder.pickupAddress;
@@ -48,8 +48,8 @@ public class OrderItem implements Serializable {
         return id;
     }
 
-    public Order getOrder() {
-        return order;
+    public Orders getOrder() {
+        return orders;
     }
 
     public Double getWeight() {
@@ -74,7 +74,7 @@ public class OrderItem implements Serializable {
         private Long id;
 
         @JsonProperty("order")
-        private Order order;
+        private Orders orders;
 
         @JsonProperty("weight")
         private Double weight;
@@ -94,8 +94,8 @@ public class OrderItem implements Serializable {
             return this;
         }
 
-        public Builder setOrder(Order order) {
-            this.order = order;
+        public Builder setOrder(Orders orders) {
+            this.orders = orders;
             return this;
         }
 
