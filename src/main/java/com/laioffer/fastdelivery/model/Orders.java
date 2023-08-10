@@ -1,6 +1,5 @@
 package com.laioffer.fastdelivery.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
@@ -9,9 +8,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "order")
-@JsonDeserialize(builder = Order.Builder.class)
-public class Order implements Serializable {
+@Table(name = "orders")
+@JsonDeserialize(builder = Orders.Builder.class)
+public class Orders implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -25,7 +24,7 @@ public class Order implements Serializable {
 
     @JsonProperty("created_date")
     private Date createdDate;
-
+    @JsonProperty
     private Double price;
 
     @JsonProperty("delivery_method")
@@ -33,12 +32,12 @@ public class Order implements Serializable {
 
     @JsonProperty("expected_delivery_time")
     private Double expectedDeliveryTime;
-
+    @JsonProperty
     private String status;
 
-    public Order() {}
+    public Orders() {}
 
-    private Order(Builder builder) {
+    private Orders(Builder builder) {
         this.id = builder.id;
         this.user = builder.user;
         this.createdDate = builder.createdDate;
@@ -49,6 +48,7 @@ public class Order implements Serializable {
     }
 
     public void setDeliveryMethod(String deliveryMethod) {
+
         this.deliveryMethod = deliveryMethod;
     }
 
@@ -146,8 +146,8 @@ public class Order implements Serializable {
             return this;
         }
 
-        public Order build() {
-            return new Order(this);
+        public Orders build() {
+            return new Orders(this);
         }
     }
 }
