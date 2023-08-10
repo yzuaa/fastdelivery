@@ -23,4 +23,7 @@ public class RegisterController{
    public void addHost(@RequestBody User user) {
       registerService.add(user, UserRole.ROLE_POSTMAN);
    }
+
+   @PostMapping("/register/enableUser")
+   public void enableUser(@RequestBody User user) {registerService.setUserEnabled(user, true);}
 }

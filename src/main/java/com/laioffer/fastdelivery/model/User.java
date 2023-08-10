@@ -28,7 +28,7 @@ public class User implements Serializable {
    private User(Builder builder) {
       this.username = builder.username;
       this.password = builder.password;
-      this.enabled = builder.enabled;
+      this.enabled = false;
    }
 
    public String getUsername() {

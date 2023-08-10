@@ -1,6 +1,7 @@
 package com.laioffer.fastdelivery.service;
 
 import com.laioffer.fastdelivery.exception.UserAlreadyExistException;
+import com.laioffer.fastdelivery.exception.UserNotExistException;
 import com.laioffer.fastdelivery.model.Authority;
 import com.laioffer.fastdelivery.model.User;
 import com.laioffer.fastdelivery.model.UserRole;
@@ -29,8 +30,21 @@ public class RegisterService {
       }
 
       user.setPassword(passwordEncoder.encode(user.getPassword()));
-      user.setEnabled(true);
+      //user.setEnabled(true);
+      user.setEnabled(false);
+      // We need email authentication
+
       userRepository.save(user);
       authorityRepository.save(new Authority(user.getUsername(), userRole.name()));
+   }
+
+   @Transactional(isolation = Isolation.SERIALIZABLE)
+   public void setUserEnabled(User user, boolean enabled) {
+      if(!userRepository.existsById(user.getUsername())) {
+         throw new UserNotExistException("User doesn't exist!");
+      }
+
+      user.setEnabled(enabled);
+      userRepository.save(user);
    }
 }
