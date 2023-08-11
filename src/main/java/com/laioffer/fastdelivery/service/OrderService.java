@@ -1,7 +1,12 @@
 package com.laioffer.fastdelivery.service;
-import com.laioffer.fastdelivery.model.*;
+
+import com.laioffer.fastdelivery.exception.OrderNotExistException;
+import com.laioffer.fastdelivery.model.Location;
+import com.laioffer.fastdelivery.model.Order;
+import com.laioffer.fastdelivery.model.User;
+import com.laioffer.fastdelivery.repository.DeliveryLocationRepository;
 import com.laioffer.fastdelivery.repository.OrderRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.laioffer.fastdelivery.repository.PickupLocationRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,21 +15,66 @@ import java.util.List;
 
 @Service
 public class OrderService {
+
     private final OrderRepository orderRepository;
 
-    public OrderService(OrderRepository orderRepository) {
+    private final PickupLocationRepository pickupLocationRepository;
+
+    private final DeliveryLocationRepository deliveryLocationRepository;
+
+    private final GeoCodingService geoCodingService;
+
+    public OrderService(OrderRepository orderRepository, PickupLocationRepository pickupLocationRepository, DeliveryLocationRepository deliveryLocationRepository, GeoCodingService geoCodingService) {
         this.orderRepository = orderRepository;
+        this.pickupLocationRepository = pickupLocationRepository;
+        this.deliveryLocationRepository = deliveryLocationRepository;
+        this.geoCodingService = geoCodingService;
+    }
+
+    public List<Order> listByUser(String username) {
+        return orderRepository.findByUser(new User.Builder().setUsername(username).build());
+    }
+
+    public Order findByIdAndUser(Long orderId, String username) throws OrderNotExistException {
+        User user = new User.Builder().setUsername(username).build();
+        Order order = orderRepository.findByIdAndUser(orderId, user);
+        if (order == null) {
+            throw new OrderNotExistException("Order doesn't exist");
+        }
+
+        return order;
+    }
+
+    @Transactional
+    public void add(Order order) {
+        orderRepository.save(order);
+
+        Location pickupLocation = geoCodingService.getLatLng(order.getId(), order.getPickupAddress());
+        pickupLocationRepository.save(pickupLocation);
+
+        Location deliveryLocation = geoCodingService.getLatLng(order.getId(), order.getDeliveryAddress());
+        deliveryLocationRepository.save(deliveryLocation);
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void delete(Long orderId, String username) throws OrderNotExistException {
+        Order order = orderRepository.findByIdAndUser(orderId, new User.Builder().setUsername(username).build());
+        if (order == null) {
+            throw new OrderNotExistException("order doesn't exist");
+        }
+
+        orderRepository.deleteById(orderId);
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void update(Long id, String status) {
-        Orders orders = orderRepository.getById(id);
-        orders.setStatus(status);
+        Order order = orderRepository.getById(id);
+        order.setStatus(status);
     }
+
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public List<Orders> getAllOrders(){
+    public List<Order> getAllOrders(){
         return orderRepository.findAll();
 
     }
-
 }
