@@ -2,7 +2,7 @@ package com.laioffer.fastdelivery.service;
 
 import com.laioffer.fastdelivery.exception.OrderNotExistException;
 import com.laioffer.fastdelivery.model.Location;
-import com.laioffer.fastdelivery.model.Order;
+import com.laioffer.fastdelivery.model.Orders;
 import com.laioffer.fastdelivery.model.User;
 import com.laioffer.fastdelivery.repository.DeliveryLocationRepository;
 import com.laioffer.fastdelivery.repository.OrderRepository;
@@ -31,13 +31,13 @@ public class OrderService {
         this.geoCodingService = geoCodingService;
     }
 
-    public List<Order> listByUser(String username) {
+    public List<Orders> listByUser(String username) {
         return orderRepository.findByUser(new User.Builder().setUsername(username).build());
     }
 
-    public Order findByIdAndUser(Long orderId, String username) throws OrderNotExistException {
+    public Orders findByIdAndUser(Long orderId, String username) throws OrderNotExistException {
         User user = new User.Builder().setUsername(username).build();
-        Order order = orderRepository.findByIdAndUser(orderId, user);
+        Orders order = orderRepository.findByIdAndUser(orderId, user);
         if (order == null) {
             throw new OrderNotExistException("Order doesn't exist");
         }
@@ -46,7 +46,7 @@ public class OrderService {
     }
 
     @Transactional
-    public void add(Order order) {
+    public void add(Orders order) {
         orderRepository.save(order);
 
         Location pickupLocation = geoCodingService.getLatLng(order.getId(), order.getPickupAddress());
@@ -58,7 +58,7 @@ public class OrderService {
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void delete(Long orderId, String username) throws OrderNotExistException {
-        Order order = orderRepository.findByIdAndUser(orderId, new User.Builder().setUsername(username).build());
+        Orders order = orderRepository.findByIdAndUser(orderId, new User.Builder().setUsername(username).build());
         if (order == null) {
             throw new OrderNotExistException("order doesn't exist");
         }
@@ -68,12 +68,12 @@ public class OrderService {
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void update(Long id, String status) {
-        Order order = orderRepository.getById(id);
+        Orders order = orderRepository.getById(id);
         order.setStatus(status);
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public List<Order> getAllOrders(){
+    public List<Orders> getAllOrders(){
         return orderRepository.findAll();
 
     }
