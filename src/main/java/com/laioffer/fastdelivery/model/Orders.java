@@ -24,15 +24,25 @@ public class Orders implements Serializable {
 
     @JsonProperty("created_date")
     private Date createdDate;
-    @JsonProperty
+
     private Double price;
+
+    private Double weight;
+
+    private String description;
+
+    @JsonProperty("pickup_address")
+    private String pickupAddress;
+
+    @JsonProperty("delivery_address")
+    private String deliveryAddress;
 
     @JsonProperty("delivery_method")
     private String deliveryMethod;
 
     @JsonProperty("expected_delivery_time")
     private Double expectedDeliveryTime;
-    @JsonProperty
+
     private String status;
 
     public Orders() {}
@@ -42,13 +52,16 @@ public class Orders implements Serializable {
         this.user = builder.user;
         this.createdDate = builder.createdDate;
         this.price = builder.price;
+        this.weight = builder.weight;
+        this.description = builder.description;;
+        this.pickupAddress = builder.pickupAddress;
+        this.deliveryAddress = builder.deliveryAddress;;
         this.deliveryMethod = builder.deliveryMethod;
         this.expectedDeliveryTime = builder.expectedDeliveryTime;
         this.status = builder.status;
     }
 
     public void setDeliveryMethod(String deliveryMethod) {
-
         this.deliveryMethod = deliveryMethod;
     }
 
@@ -74,6 +87,22 @@ public class Orders implements Serializable {
 
     public Double getPrice() {
         return price;
+    }
+
+    public Double getWeight() {
+        return weight;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getPickupAddress() {
+        return pickupAddress;
+    }
+
+    public String getDeliveryAddress() {
+        return deliveryAddress;
     }
 
     public String getDeliveryMethod() {
@@ -102,6 +131,18 @@ public class Orders implements Serializable {
         @JsonProperty("price")
         private Double price;
 
+        @JsonProperty("weight")
+        private Double weight;
+
+        @JsonProperty("description")
+        private String description;
+
+        @JsonProperty("pickup_address")
+        private String pickupAddress;
+
+        @JsonProperty("delivery_address")
+        private String deliveryAddress;
+
         @JsonProperty("delivery_method")
         private String deliveryMethod;
 
@@ -128,6 +169,26 @@ public class Orders implements Serializable {
 
         public Builder setPrice(Double price) {
             this.price = price;
+            return this;
+        }
+
+        public Builder setWeight(Double weight) {
+            this.weight = weight;
+            return this;
+        }
+
+        public Builder setDescription(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public Builder setPickupAddress(String pickupAddress) {
+            this.pickupAddress = pickupAddress;
+            return this;
+        }
+
+        public Builder setDeliveryAddress(String deliveryAddress) {
+            this.deliveryAddress = deliveryAddress;
             return this;
         }
 
