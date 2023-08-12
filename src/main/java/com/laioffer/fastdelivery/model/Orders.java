@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "orders")
@@ -23,7 +23,7 @@ public class Orders implements Serializable {
     private User user;
 
     @JsonProperty("created_date")
-    private Date createdDate;
+    private LocalDate createdDate;
 
     private Double price;
 
@@ -81,7 +81,7 @@ public class Orders implements Serializable {
         return user;
     }
 
-    public Date getCreatedDate() {
+    public LocalDate getCreatedDate() {
         return createdDate;
     }
 
@@ -126,7 +126,7 @@ public class Orders implements Serializable {
         private User user;
 
         @JsonProperty("created_date")
-        private Date createdDate;
+        private LocalDate createdDate;
 
         @JsonProperty("price")
         private Double price;
@@ -162,7 +162,7 @@ public class Orders implements Serializable {
             return this;
         }
 
-        public Builder setCreatedDate(Date createdDate) {
+        public Builder setCreatedDate(LocalDate createdDate) {
             this.createdDate = createdDate;
             return this;
         }
