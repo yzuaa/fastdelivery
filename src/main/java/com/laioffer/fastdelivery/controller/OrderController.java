@@ -6,18 +6,24 @@ import com.laioffer.fastdelivery.service.OrderService;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
+@RestController
 public class OrderController {
     private final OrderService orderService;
 
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
-    
+
+    @GetMapping(value = "/postman")
+    public List<Orders> listOrders() {
+        return orderService.getAllOrders();
+    }
+
     @GetMapping(value = "/orders")
-    public List<Orders> listOrders(Principal principal) {
+    public List<Orders> listUserOrders(Principal principal) {
         return orderService.listByUser(principal.getName());
     }
 
@@ -28,7 +34,6 @@ public class OrderController {
 
     @PostMapping("/orders")
     public void addOrder(
-            @RequestParam("create_date") Date createDate,
             @RequestParam("price") double price,
             @RequestParam("weight") double weight,
             @RequestParam("description") String description,
@@ -36,11 +41,10 @@ public class OrderController {
             @RequestParam("delivery_address") String deliveryAddress,
             @RequestParam("delivery_method") String deliveryMethod,
             @RequestParam("expected_delivery_time") double expectedDeliveryTime,
-            @RequestParam("status") String status,
             Principal principal) {
 
         Orders order = new Orders.Builder()
-                .setCreatedDate(createDate)
+                .setCreatedDate(LocalDate.now())
                 .setPrice(price)
                 .setWeight(weight)
                 .setDescription(description)
@@ -48,19 +52,17 @@ public class OrderController {
                 .setDeliveryAddress(deliveryAddress)
                 .setDeliveryMethod(deliveryMethod)
                 .setExpectedDeliveryTime(expectedDeliveryTime)
-                .setStatus(status)
                 .setUser(new User.Builder().setUsername(principal.getName()).build())
                 .build();
         orderService.add(order);
     }
-
 
     @DeleteMapping("/orders/{orderId}")
     public void deleteOrder(@PathVariable Long orderId, Principal principal) {
         orderService.delete(orderId, principal.getName());
     }
 
-    @PutMapping(value = "/orders")
+    @PutMapping(value = "/postman")
     public void updateOrders(@RequestBody Orders orders){
         orderService.update(orders.getId(), orders.getStatus());
     }
