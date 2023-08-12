@@ -1,12 +1,9 @@
 package com.laioffer.fastdelivery.service;
 
 import com.laioffer.fastdelivery.exception.OrderNotExistException;
-import com.laioffer.fastdelivery.model.Location;
 import com.laioffer.fastdelivery.model.Orders;
 import com.laioffer.fastdelivery.model.User;
-import com.laioffer.fastdelivery.repository.DeliveryLocationRepository;
 import com.laioffer.fastdelivery.repository.OrderRepository;
-import com.laioffer.fastdelivery.repository.PickupLocationRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,17 +15,8 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
 
-    private final PickupLocationRepository pickupLocationRepository;
-
-    private final DeliveryLocationRepository deliveryLocationRepository;
-
-    private final GeoCodingService geoCodingService;
-
-    public OrderService(OrderRepository orderRepository, PickupLocationRepository pickupLocationRepository, DeliveryLocationRepository deliveryLocationRepository, GeoCodingService geoCodingService) {
+    public OrderService(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
-        this.pickupLocationRepository = pickupLocationRepository;
-        this.deliveryLocationRepository = deliveryLocationRepository;
-        this.geoCodingService = geoCodingService;
     }
 
     public List<Orders> listByUser(String username) {
@@ -48,12 +36,6 @@ public class OrderService {
     @Transactional
     public void add(Orders order) {
         orderRepository.save(order);
-
-        Location pickupLocation = geoCodingService.getLatLng(order.getId(), order.getPickupAddress());
-        pickupLocationRepository.save(pickupLocation);
-
-        Location deliveryLocation = geoCodingService.getLatLng(order.getId(), order.getDeliveryAddress());
-        deliveryLocationRepository.save(deliveryLocation);
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
