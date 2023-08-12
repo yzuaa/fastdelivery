@@ -58,7 +58,7 @@ public class Orders implements Serializable {
         this.deliveryAddress = builder.deliveryAddress;;
         this.deliveryMethod = builder.deliveryMethod;
         this.expectedDeliveryTime = builder.expectedDeliveryTime;
-        this.status = builder.status;
+        this.status = "wait for pick up";
     }
 
     public void setDeliveryMethod(String deliveryMethod) {

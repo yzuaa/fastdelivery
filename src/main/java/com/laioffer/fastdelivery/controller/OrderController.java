@@ -22,6 +22,12 @@ public class OrderController {
         return orderService.getAllOrders();
     }
 
+
+    @PutMapping(value = "/postman/{itemID}/{deliveryStatus}")
+    public void updateOrders(@PathVariable Long itemID, @PathVariable String deliveryStatus){
+        orderService.update(itemID, deliveryStatus);
+    }
+
     @GetMapping(value = "/orders")
     public List<Orders> listUserOrders(Principal principal) {
         return orderService.listByUser(principal.getName());
